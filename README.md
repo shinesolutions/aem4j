@@ -1,4 +1,4 @@
-[![Build Status](https://img.shields.io/travis/shinesolutions/aem4j.svg)](http://travis-ci.org/shinesolutions/aem4j)
+[![Build Status](https://github.com/shinesolutions/aem4j/workflows/CI/badge.svg)](https://github.com/shinesolutions/aem4j/actions?query=workflow%3ACI)
 
 aem4j
 -----
