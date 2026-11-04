@@ -32,3 +32,10 @@ Error handling
 --------------
 
 TODO
+
+
+CMD
+-------------
+mvn checkstyle:check
+mvn spotbugs:check
+mvn spotless:apply

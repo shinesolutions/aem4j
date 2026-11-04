@@ -1,34 +1,59 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="https://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>com.shinesolutions</groupId>
   <artifactId>aem4j</artifactId>
-  <packaging>jar</packaging>
-  <name>aem4j</name>
   <version>0.9.0</version>
-  <url>https://github.com/shinesolutions/aem4j</url>
+  <packaging>jar</packaging>
+
+  <name>aem4j</name>
   <description>Java client for Adobe Experience Manager (AEM) API</description>
+  <url>https://github.com/shinesolutions/aem4j</url>
+
   <scm>
     <connection>scm:git:git@github.com:shinesolutions/aem4j.git</connection>
     <developerConnection>scm:git:git@github.com:shinesolutions/aem4j.git</developerConnection>
     <url>https://github.com/shinesolutions/aem4j</url>
   </scm>
-  <prerequisites>
-    <maven>2.2.0</maven>
-  </prerequisites>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.release>21</maven.compiler.release>
+    
+    <!-- Dependency Versions -->
+    <swaggeraem4j.version>0.10.0</swaggeraem4j.version>
+    <junit.jupiter.version>5.11.4</junit.jupiter.version>
+    
+    <!-- Plugin Versions -->
+    <maven-compiler-plugin.version>3.16.0</maven-compiler-plugin.version>
+    <maven-surefire-plugin.version>3.6.0</maven-surefire-plugin.version>
+    <maven-dependency-plugin.version>3.8.1</maven-dependency-plugin.version>
+    <maven-jar-plugin.version>3.5.1</maven-jar-plugin.version>
+    <build-helper-maven-plugin.version>3.6.2</build-helper-maven-plugin.version>
+    <maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
+    <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
+    <maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
+    <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
+
+    <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
+    <spotbugs-maven-plugin.version>4.10.4.1</spotbugs-maven-plugin.version>
+  </properties>
 
   <distributionManagement>
-     <repository>
-       <id>sonatype-release</id>
-       <name>Sonatype Release</name>
-       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-     </repository>
-   </distributionManagement>
+    <repository>
+      <id>sonatype-release</id>
+      <name>Sonatype Release</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+  </distributionManagement>
 
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -42,28 +67,49 @@
     </developer>
   </developers>
 
+  <dependencies>
+    <dependency>
+      <groupId>com.shinesolutions</groupId>
+      <artifactId>swaggeraem4j</artifactId>
+      <version>${swaggeraem4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>${junit.jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
-
+      <!-- Compiler Plugin configured for Java 21 release targeting -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.12</version>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
         <configuration>
-          <systemProperties>
-            <property>
-              <name>loggerPath</name>
-              <value>conf/log4j.properties</value>
-            </property>
-          </systemProperties>
-          <argLine>-Xms512m -Xmx1500m</argLine>
-          <parallel>methods</parallel>
-          <forkMode>pertest</forkMode>
+          <release>${maven.compiler.release}</release>
         </configuration>
       </plugin>
 
+      <!-- Surefire Plugin for unit testing -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <argLine>-Xms512m -Xmx1500m</argLine>
+          <reuseForks>false</reuseForks>
+          <forkCount>1</forkCount>
+        </configuration>
+      </plugin>
+
+      <!-- Copy Dependencies Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
+        <version>${maven-dependency-plugin.version}</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -77,26 +123,25 @@
         </executions>
       </plugin>
 
+      <!-- Jar Plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.2</version>
+        <version>${maven-jar-plugin.version}</version>
         <executions>
           <execution>
             <goals>
-              <goal>jar</goal>
               <goal>test-jar</goal>
             </goals>
           </execution>
         </executions>
-        <configuration>
-        </configuration>
       </plugin>
 
+      <!-- Build Helper Plugin -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.10</version>
+        <version>${build-helper-maven-plugin.version}</version>
         <executions>
           <execution>
             <id>add_sources</id>
@@ -125,10 +170,11 @@
         </executions>
       </plugin>
 
+      <!-- Javadoc Plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.4</version>
+        <version>${maven-javadoc-plugin.version}</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -139,16 +185,141 @@
         </executions>
       </plugin>
 
+      <!-- Source Plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.2.1</version>
+        <version>${maven-source-plugin.version}</version>
         <executions>
           <execution>
             <id>attach-sources</id>
             <goals>
               <goal>jar-no-fork</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Checkstyle Plugin (Code Style Linting) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${maven-checkstyle-plugin.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>10.21.4</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <configLocation>google_checks.xml</configLocation>
+          <consoleOutput>true</consoleOutput>
+          <failsOnError>true</failsOnError>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <linkXRef>false</linkXRef>
+        </configuration>
+        <executions>
+          <execution>
+            <id>validate</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>3.10.3</version>
+        <configuration>
+          <java>
+            <googleJavaFormat>
+              <version>1.36.1</version>
+              <style>GOOGLE</style>
+            </googleJavaFormat>
+            <removeUnusedImports />
+          </java>
+        </configuration>
+      </plugin>
+
+      <!-- SpotBugs Plugin (Static Analysis & Bug Detection) -->
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs-maven-plugin.version}</version>
+        <configuration>
+          <effort>Max</effort>
+          <threshold>Medium</threshold>
+          <xmlOutput>true</xmlOutput>
+          <includeTests>true</includeTests>
+          <maxHeap>1024</maxHeap>
+        </configuration>
+        <executions>
+          <execution>
+            <id>spotbugs-check</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- JaCoCo Code Coverage -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco-maven-plugin.version}</version>
+        <configuration>
+          <includes>
+            <include>com/shinesolutions/aemorchestrator/**</include>
+          </includes>
+          <excludes>
+            <exclude>com/sun/tools/attach/**</exclude>
+            <exclude>jdk/internal/**</exclude>
+            <exclude>sun/**</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>default-report</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Enforcer Plugin (Requires Java 21+ and Maven 3.10+) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-versions</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>[3.10.0,)</version>
+                </requireMavenVersion>
+                <requireJavaVersion>
+                  <version>[21,)</version>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -163,7 +334,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.5</version>
+            <version>${maven-gpg-plugin.version}</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -178,19 +349,4 @@
       </build>
     </profile>
   </profiles>
-
-  <dependencies>
-    <dependency>
-      <groupId>com.shinesolutions</groupId>
-      <artifactId>swaggeraem4j</artifactId>
-      <version>0.9.0</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>LATEST</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-
 </project>
