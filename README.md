@@ -1,4 +1,5 @@
 [![Build Status](https://github.com/shinesolutions/aem4j/workflows/CI/badge.svg)](https://github.com/shinesolutions/aem4j/actions?query=workflow%3ACI)
+[![Code Scanning Status](https://github.com/shinesolutions/aem4j/workflows/CodeQL/badge.svg)](https://github.com/shinesolutions/aem4j/actions?query=workflow%3ACodeQL)
 
 aem4j
 -----
