@@ -27,5 +27,9 @@ jobs:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: ./.github/actions/ci-action
+    - uses: actions/checkout@v7
+    - uses: cliffano/command-docker-action@v2.1.0
+      with:
+        command: mvn clean package
+        image: shinesolutions/aem-platform-buildenv:3.2.0
+        shell: bash
